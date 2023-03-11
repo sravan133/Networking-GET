@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+                    <link rel="stylesheet" href="style.css" />
+                    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"/>
+                    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+                    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+</head>
+<body>
+                    <div class="container">
+                                        <div class="row">
+                                                            <div class="col-mi-6">
+                                                                                <h1>BOOKING APPOINTMENT</h1>
+                                                                                <form id="myform">
+                                                                                                    
+                                                                                                    <div class="mt-4">
+                                                                                                                        <label for="inputid1">Name</label>
+                                                                                                                        <input type="text" id="inputid1"/>
+                                                                                                    </div >
+                                                                                                    <div class="mt-2">
+                                                                                                                        <label for="inputid2">Gmail</label>
+                                                                                                                        <input type="text" id="inputid2"/>
+
+                                                                                                    </div>
+                                                                                                    <button type="submit" class="btn btn-primary mt-3">submit</button>
+                    
+                                                                                </form>
+                                                                                <ul id="listofitems"></ul>
+                                                                                <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
+                                                            </div>
+                                        </div>
+                    </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>                   
+<script>
+                    let butnele=document.getElementById("myform");
+                    butnele.addEventListener("submit",function(event){
+                                        event.preventDefault()
+                                        let name=event.target.inputid1.value;
+                                        let email=event.target.inputid2.value;
+                                        let obj={
+                                                            name,
+                                                            email
+                                        }
+                                        axios.post("https://crudcrud.com/api/7e0b1d3fabf14227a0cdbbd3f0360bf5/studentData",obj)
+                                                            .then((response)=>{
+                                                                                console.log(response)
+                                                            })
+                                                            .catch((err)=>{
+                                                                                console.log(err)
+                                                            })
+                                        //localStorage.setItem(obj.ans2,JSON.stringify(obj));
+                                        showOnScreen(obj)
+                    })
+                    window.addEventListener("DOMContentLoaded",()=>{
+                                        axios.get("https://crudcrud.com/api/7e0b1d3fabf14227a0cdbbd3f0360bf5/studentData")
+                                                            .then((response)=>{
+                                                                                console.log(response)
+                                                                                for(var i=0;i<response.data.length;i++){
+                                                                                                    showOnScreen(response.data[i]);
+
+
+                                                                                }
+                                                            })
+                                                            .catch((err)=>{
+                                                                                console.log(err)
+                                                            })
+                    })
+
+                    function showOnScreen(obj){
+                                        let parent=document.getElementById("listofitems");
+                                        let child1=document.createElement("li");
+                                        child1.textContent=obj.name+" "+obj.email;
+                                        parent.appendChild(child1)
+
+                                        let button1=document.createElement("input");
+                                        button1.type="button"
+                                        button1.style.margin="3px"
+                                        button1.value="Delete"
+                                        button1.onclick=()=>{
+                                                            localStorage.removeItem(obj.email);
+                                                            parent.removeChild(child1);
+                                        }
+                                        child1.appendChild(button1)
+                                        parent.appendChild(child1)
+                                        
+
+                                        let button2=document.createElement("input")
+                                        button2.type="button"
+                                        button2.style.margin="3px"
+                                        button2.value="Edit"
+                                        button2.onclick=()=>{
+                                                            localStorage.removeItem(obj.email);
+                                                            parent.removeChild(child1)
+                                                            document.getElementById("inputid1").value=obj.name;
+                                                            document.getElementById("inputid2").value=obj.email;
+                                        }
+                                        //child1.appendChild(button1)
+                                        child1.appendChild(button2)
+                                        parent.appendChild(child1)
+                    }
+
+</script>
+</body>
+</html>
